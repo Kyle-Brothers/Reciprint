@@ -1,7 +1,8 @@
 import React from 'react';
 
 const Item = props => {
-  return <p>{props.result}</p>;
+  const {result} = props;
+  return <p>{result.rank}</p>;
 };
 
 export default Item;
