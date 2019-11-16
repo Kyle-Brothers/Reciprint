@@ -9,6 +9,7 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Typography from '@material-ui/core/Typography';
 
 class Result extends Component {
   constructor() {
@@ -130,10 +131,12 @@ class Result extends Component {
           </Select>
         </FormControl>
 
-        <div>
-          <ButtonGroup size="large" aria-label="small outlined button group">
-            <Button onClick={this.onClick}>反映</Button>
-          </ButtonGroup>
+        <div style={{padding: '10%'}}>
+          <Typography variant="h5" component="h2" align="center">
+            <ButtonGroup size="large" aria-label="small outlined button group">
+              <Button onClick={this.onClick}>反映</Button>
+            </ButtonGroup>
+          </Typography>
         </div>
 
         <div>

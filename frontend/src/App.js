@@ -5,8 +5,14 @@ import Result from './components/result';
 
 function App() {
   return (
-    <div>
-      <img src={logo} alt="" style={{width: '75%', textAlign: 'center'}} />
+    <div style={{margin: 'auto'}}>
+      <div style={{textAlign: 'center'}}>
+        <img
+          src={logo}
+          alt=""
+          style={{width: '80%', margin: 'auto', textAlign: 'center'}}
+        />
+      </div>
       <Result />
     </div>
   );
