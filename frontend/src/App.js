@@ -6,7 +6,7 @@ import Result from './components/result';
 function App() {
   return (
     <div style={{margin: 'auto'}}>
-      <div style={{textAlign: 'center'}}>
+      <div style={{textAlign: 'center', padding: '5%'}}>
         <img
           src={logo}
           alt=""
