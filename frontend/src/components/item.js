@@ -9,19 +9,48 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import {red} from '@material-ui/core/colors';
+import {makeStyles} from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  card: {
+    maxWidth: 400,
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  avatar: {
+    backgroundColor: red[400],
+  },
+}));
 
 const Item = props => {
+  const classes = useStyles();
   const {result} = props;
   return (
-    <div>
-      <Card>
+    <div style={{padding: '3%'}}>
+      <Card className={classes.card}>
         <a
           href={result.recipeUrl}
           rel="noopener noreferrer"
           target="_blank"
           style={{textDecoration: 'none'}}>
           <CardHeader
-            avatar={<Avatar aria-label="recipe">♡</Avatar>}
+            avatar={
+              <Avatar aria-label="recipe" className={classes.avatar}>
+                ♡
+              </Avatar>
+            }
             action={<IconButton aria-label="settings"></IconButton>}
             title={result.recipeTitle}
             subheader={`調理時間目安：${result.recipeIndication}`}
