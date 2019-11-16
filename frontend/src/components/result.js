@@ -6,15 +6,22 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 class Result extends Component {
   constructor() {
     super();
     this.state = {
-      results: [],
-      s_input: [],
+      mresults: [],
+      s_input: '',
+      s_name: [],
+      s_url: '',
+      sresult: [],
       m_parent: '',
       m_input: '',
+      m_name: [],
       s_categories: [],
       m_categories: [],
     };
@@ -34,47 +41,77 @@ class Result extends Component {
   }
 
   onClick = () => {
-    console.table(this.state.m_parent);
-    console.table(this.state.m_input);
-    this.setState({result: []});
+    this.setState({sresult: []});
+    this.setState({mresult: []});
+    const config = {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    };
     axios
       .get(
         `https://app.rakuten.co.jp/services/api/Recipe/CategoryRanking/20170426?applicationId=1070935156909805148&categoryId=${this.state.m_parent}-${this.state.m_input}`,
       )
       .then(response => {
         this.setState({
-          results: response.data.result,
+          mresults: response.data.result,
         });
       });
-    console.table(this.state.results);
+    axios
+      .get(
+        `https://app.rakuten.co.jp/services/api/Recipe/CategoryRanking/20170426?applicationId=1070935156909805148&categoryId=${this.state.s_url}`,
+        config,
+      )
+      .then(response => {
+        this.setState({
+          sresults: response.data.result,
+        });
+      });
+    console.table(this.state.sresults);
+    this.state.mresults.concat(this.state.sresults);
+    console.log(this.state.mresults);
   };
 
   sHandleChange = e => {
-    this.setState({s_input: e.target.value});
+    let list = [];
+    list.push(e.target.value.split(','));
+    let index = list[0][1].indexOf('y/');
+    let str = list[0][1].slice(index + 1);
+    str = str.replace('/', '');
+    str = str.replace('/', '');
+    this.setState({s_name: e.target.value});
+    this.setState({s_input: list[0][0]});
+    this.setState({s_url: str});
   };
 
   mHandleChange = e => {
     let list = [];
     list.push(e.target.value.split(','));
+    this.setState({m_name: e.target.value});
     this.setState({m_input: list[0][0]});
     this.setState({m_parent: list[0][1]});
   };
 
   render() {
-    const {results} = this.state;
+    let {mresults} = this.state;
+    let {sresults} = this.state;
     const {s_categories} = this.state;
     const {m_categories} = this.state;
+    console.log(sresults);
+    let results = mresults.concat(sresults);
     return (
       <div>
         <FormControl>
           <InputLabel htmlFor="age-native-simple">食材</InputLabel>
           <Select
             native
-            value={this.state.s_input}
+            value={this.state.s_name}
             onChange={this.sHandleChange}>
             <option value="" />
             {s_categories.map(s => (
-              <option value={s.categoryId}>{s.categoryName}</option>
+              <option value={[`${s.categoryId}`, `${s.categoryUrl}`]}>
+                {s.categoryName}
+              </option>
             ))}
           </Select>
         </FormControl>
@@ -82,7 +119,7 @@ class Result extends Component {
           <InputLabel htmlFor="age-native-simple">食材2</InputLabel>
           <Select
             native
-            value={this.state.m_input}
+            value={this.state.m_name}
             onChange={this.mHandleChange}>
             <option value="" />
             {m_categories.map(m => (
@@ -92,16 +129,18 @@ class Result extends Component {
             ))}
           </Select>
         </FormControl>
+
         <div>
-          <p>{this.state.s_input}</p>
-          <p>Hello</p>
-          <p>{this.state.m_input}</p>
-          <p>{this.state.m_parent}</p>
-          <button onClick={this.onClick}>反映</button>
+          <ButtonGroup size="large" aria-label="small outlined button group">
+            <Button onClick={this.onClick}>反映</Button>
+          </ButtonGroup>
         </div>
-        {results.map(result => (
-          <Item result={result} />
-        ))}
+
+        <div>
+          {mresults.map(result => (
+            <Item result={result} />
+          ))}
+        </div>
       </div>
     );
   }
