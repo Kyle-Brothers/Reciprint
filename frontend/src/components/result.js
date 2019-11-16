@@ -12,7 +12,8 @@ class Result extends Component {
     super();
     this.state = {
       results: [],
-      s_input: '',
+      s_input: [],
+      m_parent: '',
       m_input: '',
       s_categories: [],
       m_categories: [],
@@ -30,29 +31,39 @@ class Result extends Component {
           m_categories: response.data.result.medium,
         });
       });
+  }
 
+  onClick = () => {
+    console.table(this.state.m_parent);
+    console.table(this.state.m_input);
+    this.setState({result: []});
     axios
       .get(
-        'https://app.rakuten.co.jp/services/api/Recipe/CategoryRanking/20170426?applicationId=1070935156909805148',
+        `https://app.rakuten.co.jp/services/api/Recipe/CategoryRanking/20170426?applicationId=1070935156909805148&categoryId=${this.state.m_parent}-${this.state.m_input}`,
       )
       .then(response => {
         this.setState({
           results: response.data.result,
         });
       });
-  }
+    console.table(this.state.results);
+  };
 
-  sHandleChange(e) {
+  sHandleChange = e => {
     this.setState({s_input: e.target.value});
-  }
+  };
+
+  mHandleChange = e => {
+    let list = [];
+    list.push(e.target.value.split(','));
+    this.setState({m_input: list[0][0]});
+    this.setState({m_parent: list[0][1]});
+  };
 
   render() {
     const {results} = this.state;
     const {s_categories} = this.state;
     const {m_categories} = this.state;
-    console.log(results);
-    console.table(s_categories);
-    console.table(m_categories);
     return (
       <div>
         <FormControl>
@@ -60,14 +71,10 @@ class Result extends Component {
           <Select
             native
             value={this.state.s_input}
-            onChange={this.sHandleChange}
-            inputProps={{
-              name: 'age',
-              id: 'age-native-simple',
-            }}>
+            onChange={this.sHandleChange}>
             <option value="" />
             {s_categories.map(s => (
-              <option>{s.categoryName}</option>
+              <option value={s.categoryId}>{s.categoryName}</option>
             ))}
           </Select>
         </FormControl>
@@ -76,17 +83,22 @@ class Result extends Component {
           <Select
             native
             value={this.state.m_input}
-            /*onChange={handleChange('age')} */
-            inputProps={{
-              name: 'age',
-              id: 'age-native-simple',
-            }}>
+            onChange={this.mHandleChange}>
             <option value="" />
             {m_categories.map(m => (
-              <option>{m.categoryName}</option>
+              <option value={[`${m.categoryId}`, `${m.parentCategoryId}`]}>
+                {m.categoryName}
+              </option>
             ))}
           </Select>
         </FormControl>
+        <div>
+          <p>{this.state.s_input}</p>
+          <p>Hello</p>
+          <p>{this.state.m_input}</p>
+          <p>{this.state.m_parent}</p>
+          <button onClick={this.onClick}>反映</button>
+        </div>
         {results.map(result => (
           <Item result={result} />
         ))}
