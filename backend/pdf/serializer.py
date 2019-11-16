@@ -6,4 +6,4 @@ from .models import Pdf
 class PdfSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pdf
-        fields = ('url')
+        fields = ("url",)
