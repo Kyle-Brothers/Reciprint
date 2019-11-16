@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import {red} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
+import Send from './send';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -67,6 +68,7 @@ const Item = props => {
               <li>{a}</li>
             ))}
           </Typography>
+          <Send url={result.recipeUrl} />
         </CardContent>
       </Card>
     </div>
