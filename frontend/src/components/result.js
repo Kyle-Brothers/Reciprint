@@ -11,10 +11,14 @@ class Result extends Component {
   constructor() {
     super();
     this.state = {
-      results: [],
-      s_input: [],
+      mresults: [],
+      s_input: '',
+      s_name: [],
+      s_url: '',
+      sresult: [],
       m_parent: '',
       m_input: '',
+      m_name: [],
       s_categories: [],
       m_categories: [],
     };
@@ -34,34 +38,48 @@ class Result extends Component {
   }
 
   onClick = () => {
-    console.table(this.state.m_parent);
-    console.table(this.state.m_input);
-    this.setState({result: []});
+    this.setState({sresult: []});
+    this.setState({mresult: []});
     axios
       .get(
         `https://app.rakuten.co.jp/services/api/Recipe/CategoryRanking/20170426?applicationId=1070935156909805148&categoryId=${this.state.m_parent}-${this.state.m_input}`,
       )
       .then(response => {
         this.setState({
-          results: response.data.result,
+          mresults: response.data.result,
         });
       });
-    console.table(this.state.results);
+    axios
+      .get(
+        `https://app.rakuten.co.jp/services/api/Recipe/CategoryRanking/20170426?applicationId=1070935156909805148&categoryId=${this.state.s_url}`,
+      )
+      .then(response => {
+        this.setState({
+          sresults: response.data.result,
+        });
+      });
   };
 
   sHandleChange = e => {
-    this.setState({s_input: e.target.value});
+    console.log('hello');
+    let list = [];
+    list.push(e.target.value.split(','));
+    console.log(list[0][1].slice(-11, -1));
+    this.setState({s_name: e.target.value});
+    this.setState({s_input: list[0][0]});
+    this.setState({s_url: list[0][1]});
   };
 
   mHandleChange = e => {
     let list = [];
     list.push(e.target.value.split(','));
+    this.setState({m_name: e.target.value});
     this.setState({m_input: list[0][0]});
     this.setState({m_parent: list[0][1]});
   };
 
   render() {
-    const {results} = this.state;
+    const {mresults} = this.state;
     const {s_categories} = this.state;
     const {m_categories} = this.state;
     return (
@@ -70,11 +88,13 @@ class Result extends Component {
           <InputLabel htmlFor="age-native-simple">食材</InputLabel>
           <Select
             native
-            value={this.state.s_input}
+            value={this.state.s_name}
             onChange={this.sHandleChange}>
             <option value="" />
             {s_categories.map(s => (
-              <option value={s.categoryId}>{s.categoryName}</option>
+              <option value={[`${s.categoryId}`, `${s.categoryUrl}`]}>
+                {s.categoryName}
+              </option>
             ))}
           </Select>
         </FormControl>
@@ -82,7 +102,7 @@ class Result extends Component {
           <InputLabel htmlFor="age-native-simple">食材2</InputLabel>
           <Select
             native
-            value={this.state.m_input}
+            value={this.state.m_name}
             onChange={this.mHandleChange}>
             <option value="" />
             {m_categories.map(m => (
@@ -93,14 +113,10 @@ class Result extends Component {
           </Select>
         </FormControl>
         <div>
-          <p>{this.state.s_input}</p>
-          <p>Hello</p>
-          <p>{this.state.m_input}</p>
-          <p>{this.state.m_parent}</p>
           <button onClick={this.onClick}>反映</button>
         </div>
-        {results.map(result => (
-          <Item result={result} />
+        {mresults.map(mresult => (
+          <Item result={mresult} />
         ))}
       </div>
     );
