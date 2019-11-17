@@ -63,12 +63,26 @@ const Item = props => {
           />
         </a>
         <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography
+            variant="body1"
+            color="textSecondary"
+            align="center"
+            style={{padding: '2%'}}>
+            【他に必要な材料】
+          </Typography>
+
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            component="p"
+            align="left">
             {result.recipeMaterial.map(a => (
               <li>{a}</li>
             ))}
           </Typography>
-          <Send url={result.recipeUrl} />
+          <div style={{padding: '3%'}}>
+            <Send url={result.recipeUrl} />
+          </div>
         </CardContent>
       </Card>
     </div>

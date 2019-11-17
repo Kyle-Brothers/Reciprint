@@ -12,19 +12,14 @@ class Send extends Component {
     };
   }
 
-  componentDidMount() {
-    console.log('hello');
-    console.log(this.props);
-  }
-
   onClick = () => {
     let params = new URLSearchParams();
-    params.append('url', `${this.props.url}`);
-
+    let url = this.props.url;
+    params.append('url', url);
+    console.log(this.props.url);
     axios
       .post('http://localhost:8000/api/Pdf/', params)
       .then(function(response) {
-        console.log(this.state.inputs);
         console.log(response);
       })
       .catch(function(error) {
@@ -34,8 +29,8 @@ class Send extends Component {
   render() {
     return (
       <div>
-        <ButtonGroup size="small" aria-label="small outlined button group">
-          <Button onClick={this.onClick}>印刷</Button>
+        <ButtonGroup size="large" aria-label="small outlined button group">
+          <Button onClick={this.onClick}>レシピを印刷する</Button>
         </ButtonGroup>
       </div>
     );
