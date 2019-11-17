@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import axios from 'axios';
+import {useAlert} from 'react-alert';
 
 class Send extends Component {
   constructor(props) {
@@ -17,6 +18,11 @@ class Send extends Component {
     let url = this.props.url;
     params.append('url', url);
     console.log(this.props.url);
+    let result = window.confirm('本当に印刷しても大丈夫ですか？');
+    if (result) {
+    } else {
+      return;
+    }
     axios
       .post('http://localhost:8000/api/Pdf/', params)
       .then(function(response) {
