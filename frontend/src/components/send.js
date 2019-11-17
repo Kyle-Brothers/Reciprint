@@ -18,7 +18,11 @@ class Send extends Component {
     let url = this.props.url;
     params.append('url', url);
     console.log(this.props.url);
-    const alert = useAlert();
+    let result = window.confirm('本当に印刷しても大丈夫ですか？');
+    if (result) {
+    } else {
+      return;
+    }
     axios
       .post('http://localhost:8000/api/Pdf/', params)
       .then(function(response) {
