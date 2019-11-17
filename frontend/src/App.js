@@ -13,7 +13,7 @@ function App() {
           style={{width: '80%', margin: 'auto', textAlign: 'center'}}
         />
       </div>
-      <Result />
+      <Result style={{textAlign: '-webkit-center'}} />
     </div>
   );
 }

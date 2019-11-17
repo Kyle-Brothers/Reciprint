@@ -35,7 +35,7 @@ class Result extends Component {
       )
       .then(response => {
         this.setState({
-          s_categories: response.data.result.small,
+          /*  s_categories: response.data.result.small, */
           m_categories: response.data.result.medium,
         });
       });
@@ -96,13 +96,13 @@ class Result extends Component {
   render() {
     let {mresults} = this.state;
     let {sresults} = this.state;
-    const {s_categories} = this.state;
+    /*const {s_categories} = this.state; */
     const {m_categories} = this.state;
     console.log(sresults);
-    let results = mresults.concat(sresults);
+    /* let results = mresults.concat(sresults); */
     return (
       <div>
-        <FormControl>
+        {/* <FormControl>
           <InputLabel htmlFor="age-native-simple">食材</InputLabel>
           <Select
             native
@@ -115,31 +115,35 @@ class Result extends Component {
               </option>
             ))}
           </Select>
-        </FormControl>
-        <FormControl>
-          <InputLabel htmlFor="age-native-simple">食材2</InputLabel>
-          <Select
-            native
-            value={this.state.m_name}
-            onChange={this.mHandleChange}>
-            <option value="" />
-            {m_categories.map(m => (
-              <option value={[`${m.categoryId}`, `${m.parentCategoryId}`]}>
-                {m.categoryName}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
+        </FormControl> */}
+        <div style={{textAlign: 'center'}}>
+          <FormControl>
+            <InputLabel htmlFor="age-native-simple">
+              調理したい食材を選ぶ
+            </InputLabel>
+            <Select
+              native
+              value={this.state.m_name}
+              onChange={this.mHandleChange}>
+              <option value="" />
+              {m_categories.map(m => (
+                <option value={[`${m.categoryId}`, `${m.parentCategoryId}`]}>
+                  {m.categoryName}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
 
         <div style={{padding: '10%'}}>
           <Typography variant="h5" component="h2" align="center">
             <ButtonGroup size="large" aria-label="small outlined button group">
-              <Button onClick={this.onClick}>反映</Button>
+              <Button onClick={this.onClick}>人気レシピを調べる</Button>
             </ButtonGroup>
           </Typography>
         </div>
 
-        <div>
+        <div style={{textAlign: '-webkit-center'}}>
           {mresults.map(result => (
             <Item result={result} />
           ))}
